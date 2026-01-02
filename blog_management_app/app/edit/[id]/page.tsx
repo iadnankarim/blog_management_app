@@ -1,24 +1,24 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { use, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { useBlogs } from '@/hooks/useBlogs';
+import { useGetPostByIdQuery } from '@/lib/redux/hooks/useBlogQueries';
 import BlogForm from '@/components/blog/BlogForm';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ErrorAlert from '@/components/ui/ErrorAlert';
 
-export default function EditBlogPage() {
-  const { isAuthenticated, isLoading, user } = useAuth();
-  const { blogs } = useBlogs();
+export default function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth();
+  const { data: blog, isLoading: blogLoading, isError, error } = useGetPostByIdQuery(id);
   const router = useRouter();
-  const params = useParams();
-
-  const blog = blogs.find(b => b.id === params.id);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!authLoading && !isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, authLoading, router]);
 
   useEffect(() => {
     if (blog && user && blog.authorId !== user.id) {
@@ -26,20 +26,36 @@ export default function EditBlogPage() {
     }
   }, [blog, user, router]);
 
-  if (isLoading) {
+  if (authLoading || blogLoading) {
     return (
-      <div className="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center">
-        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+      <div className="bg-white dark:bg-gray-900 min-h-screen">
+        <LoadingSpinner className="min-h-screen" />
       </div>
     );
   }
 
-  if (!isAuthenticated || !blog) {
+  if (!isAuthenticated) {
     return null;
   }
 
+  if (isError || !blog) {
+    return (
+      <div className="bg-white dark:bg-gray-900 min-h-screen">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-24 py-12">
+          <ErrorAlert message={error?.message || 'Blog post not found'} />
+        </div>
+      </div>
+    );
+  }
+
   if (blog.authorId !== user?.id) {
-    return null;
+    return (
+      <div className="bg-white dark:bg-gray-900 min-h-screen">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-24 py-12">
+          <ErrorAlert message="You don't have permission to edit this post" />
+        </div>
+      </div>
+    );
   }
 
   return (
