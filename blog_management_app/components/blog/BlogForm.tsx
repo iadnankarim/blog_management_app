@@ -54,7 +54,7 @@ export default function BlogForm({ mode, blog }: BlogFormProps) {
       authorAvatar: user.avatar,
       createdAt: blog?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      tags: data.tags || [],
+      tags: blog?.tags || [],
     };
 
     if (mode === 'create') {

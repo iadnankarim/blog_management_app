@@ -23,13 +23,13 @@ export default function BlogDetail({ blog }: BlogDetailProps) {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-8 md:mb-10 pb-8 md:pb-10 border-b border-gray-100 dark:border-gray-800">
           <div className="flex items-center gap-3 md:gap-4">
             <Avatar className="h-12 w-12 md:h-14 md:w-14">
-              <AvatarImage src={blog.authorAvatar} alt={blog.authorName} />
+              <AvatarImage src={blog.authorAvatar} alt={blog.authorName || blog.author || 'Author'} />
               <AvatarFallback className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">
-                {blog.authorName[0]}
+                {(blog.authorName || blog.author || 'A')[0]}
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-semibold text-gray-900 dark:text-gray-100 text-base">{blog.authorName}</p>
+              <p className="font-semibold text-gray-900 dark:text-gray-100 text-base">{blog.authorName || blog.author || 'Anonymous'}</p>
               <p className="text-[15px] text-gray-500 dark:text-gray-400">
                 {new Date(blog.createdAt).toLocaleDateString('en-US', {
                   year: 'numeric',

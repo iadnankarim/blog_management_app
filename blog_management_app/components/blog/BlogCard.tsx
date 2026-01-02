@@ -31,13 +31,13 @@ export default function BlogCard({ blog }: BlogCardProps) {
 
         <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700 mt-auto">
           <Avatar className="h-9 w-9 ring-2 ring-gray-100 dark:ring-gray-700">
-            <AvatarImage src={blog.authorAvatar} alt={blog.authorName} />
+            <AvatarImage src={blog.authorAvatar} alt={blog.authorName || blog.author || 'Author'} />
             <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 text-sm font-semibold">
-              {blog.authorName[0]}
+              {(blog.authorName || blog.author || 'A')[0]}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{blog.authorName}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{blog.authorName || blog.author || 'Anonymous'}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
               {new Date(blog.createdAt).toLocaleDateString('en-US', {
                 month: 'short',
