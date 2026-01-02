@@ -10,6 +10,10 @@ const app: Application = express();
 app.use(cors({
   origin: config.corsOrigin,
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 600, // Cache preflight request for 10 minutes
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
