@@ -31,6 +31,7 @@ interface RichTextEditorProps {
 
 export default function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const editor = useEditor({
+    immediatelyRender: false, // Fix for Next.js SSR hydration
     extensions: [
       StarterKit.configure({
         heading: {

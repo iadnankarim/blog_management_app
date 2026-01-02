@@ -1,7 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
       <main className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-24 py-12 md:py-20 lg:py-28">
@@ -21,7 +26,7 @@ export default function Home() {
               Read Blogs
             </Button>
           </Link>
-          <Link href="/login" className="w-full sm:w-auto">
+          <Link href={isAuthenticated ? "/create" : "/login"} className="w-full sm:w-auto">
             <Button variant="outline" className="w-full sm:w-auto border-gray-300 dark:border-gray-700 px-6 md:px-8 py-3 md:py-6 text-base font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
               Start Writing
             </Button>

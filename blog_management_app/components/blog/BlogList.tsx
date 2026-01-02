@@ -15,7 +15,7 @@ export default function BlogList({ blogs }: BlogListProps) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+    <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
       {blogs.map(blog => (
         <BlogCard key={blog.id} blog={blog} />
       ))}
