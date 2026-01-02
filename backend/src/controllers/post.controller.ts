@@ -5,11 +5,29 @@ import Post from '../models/Post.model';
 // @route   GET /api/posts
 // @access  Public
 export const getAllPosts = async (
-  _req: Request,
+  req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const posts = await Post.find()
+    const { search, tag } = req.query;
+
+    // Build query object based on filters
+    const query: any = {};
+
+    // Search in title and content
+    if (search && typeof search === 'string') {
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { content: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    // Filter by tag
+    if (tag && typeof tag === 'string') {
+      query.tags = tag;
+    }
+
+    const posts = await Post.find(query)
       .populate('author', 'name email') // Include author details
       .sort({ createdAt: -1 }); // Latest posts first
 
